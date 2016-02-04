@@ -15,19 +15,21 @@ exports.serveIndex = function(res, asset, callback) {
   //   if(err) throw err;
   //   var indexPage = JSON.stringify(data);
   // });
-  res.writeHead(200, null);
+  res.writeHead(200, this.headers);
   res.end(JSON.stringify('Hello test /<input/ what'));
 };
 
 exports.serveAssets = function(res, url, callback) {
-  if (archive.isUrlInList(url)){
-        res.writeHead(200, null);
-        // figure out how to read the site in archives/sites/ folder
-        // and pass it back to res.end
-        res.end(JSON.stringify());
-      }else{
-        res.writeHead(404, null);
-      }
+    console.log("url", archive.isUrlInList(url));
+  if (archive.isUrlInList(url)) {
+  //   // res.writeHead(200, this.headers);
+  //   // figure out how to read the site in archives/sites/ folder
+  //   // and pass it back to res.end
+  //   // res.end(JSON.stringify());
+  } else {
+    res.writeHead(404, this.headers);
+    res.end("There was an error 404");
+  }
 };
 
 

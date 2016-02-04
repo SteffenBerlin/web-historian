@@ -14,7 +14,7 @@ exports.handleRequest = function (req, res) {
   if(req.method === 'GET' && url.length === 0){
     httpHelp.serveIndex(res, indexPath);
   } else if(req.method === 'GET') {
-    httpHelp.serveAsset(res, url);
+    httpHelp.serveAssets(res, url);
   }
   // res.end(archive.paths.list);
 };
