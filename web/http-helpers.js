@@ -10,10 +10,24 @@ exports.headers = headers = {
   'Content-Type': "text/html"
 };
 
-exports.serveAssets = function(res, asset, callback) {
-  // Write some code here that helps serve up your static files!
-  // (Static files are things like html (yours or archived from others...),
-  // css, or anything that doesn't change often.)
+exports.serveIndex = function(res, asset, callback) {
+  // fs.readFile(indexPath, 'utf8', function(err, data){
+  //   if(err) throw err;
+  //   var indexPage = JSON.stringify(data);
+  // });
+  res.writeHead(200, null);
+  res.end(JSON.stringify('Hello test /<input/ what'));
+};
+
+exports.serveAssets = function(res, url, callback) {
+  if (archive.isUrlInList(url)){
+        res.writeHead(200, null);
+        // figure out how to read the site in archives/sites/ folder
+        // and pass it back to res.end
+        res.end(JSON.stringify());
+      }else{
+        res.writeHead(404, null);
+      }
 };
 
 
