@@ -27,20 +27,18 @@ exports.serveAssets = function(res, url) {
     //else
       //return is in progress
   //else return 404
-    console.log("THIS Is the url", url);
+    console.log("1. Url for ServeAssets", url);
     archive.isUrlInList(url, function(inList){
-      console.log("is it in the list:",inList);
+      console.log("4. callback result - is it in the list?",inList);
       if (inList) {
         archive.isUrlArchived(url, function(data){
-          res.writeHead(200, this.headers);
-          res.end(JSON.stringify(data));
+          if (data) {
+            res.writeHead(200, this.headers);
+            res.end(JSON.stringify(data));
+          } else {
+            //return is in progress
+          }
         });
-
-      // console.log("Callbackworked!!!", data);
-      //   // res.writeHead(200, this.headers);
-      //   // figure out how to read the site in archives/sites/ folder
-      //   // and pass it back to res.end
-      //   // res.end(JSON.stringify());
       } else {
         res.writeHead(404, this.headers);
         res.end("There was an error 404");
@@ -51,7 +49,7 @@ exports.serveAssets = function(res, url) {
 exports.postAssets = function(res, url) {
   archive.isUrlInList(url, function(inList){
     if(!inList){
-      archive.addUrltoList(url, function(data){
+      archive.addUrltoList(url, function(){
         res.writeHead(201, this.headers);
         res.end("Added to the list");
       });

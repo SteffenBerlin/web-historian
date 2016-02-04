@@ -25,13 +25,16 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function() {
+exports.readListOfUrls = function(url, callback) {
+  console.log("2. URL passed to isUrlInList:", url);
+  fs.readFile(exports.paths.list,'utf8', function(err, data){
+    console.log("3. Inside fs.readFile - Data returned: ", data);
+    callback(err, data);
+  });
 };
 
 exports.isUrlInList = function(url, callback) {
-
-  fs.readFile(this.paths.list,'utf8', function(err, data){
-    console.log("Inside fs.readFile", data);
+  exports.readListOfUrls(url, function(err, data){
     if(err) throw err;
     if(data.indexOf(url) > -1 ){
       callback(true);
@@ -42,16 +45,20 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
-  fs.appendFile(this.paths.list, url, 'utf8', function(err, data){
+  fs.appendFile(exports.paths.list, url, 'utf8', function(err, data){
     if(err) throw err;
     callback();
   });
 };
 
-exports.isUrlArchived = function() {
-  // fs.exists(this.paths.list, function(exists){
-    // if exists..
-  // })
+exports.isUrlArchived = function(url, callback) {
+  fs.readFile(exports.paths.archivedSites + '/' + url, function(err, data){
+    if(err) throw err;
+    // if exists
+    callback(err, null);
+
+    callback(null, data);
+  })
 };
 
 exports.downloadUrls = function() {
