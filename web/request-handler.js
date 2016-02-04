@@ -14,8 +14,12 @@ exports.handleRequest = function (req, res) {
   if(req.method === 'GET' && url.length === 0){
     httpHelp.serveIndex(res, indexPath);
   } else if(req.method === 'GET') {
+    // console.log("httpHelp inside basic-server", httpHelp);
     httpHelp.serveAssets(res, url);
+  } else if(req.method === 'POST') {
+    httpHelp.postAssets(res, url);
   }
+
   // res.end(archive.paths.list);
 };
 

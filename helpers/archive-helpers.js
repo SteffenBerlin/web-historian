@@ -28,19 +28,24 @@ exports.initialize = function(pathsObj) {
 exports.readListOfUrls = function() {
 };
 
-exports.isUrlInList = function(url) {
+exports.isUrlInList = function(url, callback) {
+
   fs.readFile(this.paths.list,'utf8', function(err, data){
+    console.log("Inside fs.readFile", data);
     if(err) throw err;
     if(data.indexOf(url) > -1 ){
-      return true;
-    }
-    else {
-      return false;
+      callback(true);
+    } else {
+      callback(false);
     }
   });
 };
 
-exports.addUrlToList = function() {
+exports.addUrlToList = function(url, callback) {
+  fs.appendFile(this.paths.list, url, 'utf8', function(err, data){
+    if(err) throw err;
+    callback();
+  });
 };
 
 exports.isUrlArchived = function() {
