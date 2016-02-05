@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 var http = require("http");
+var request = require("request");
 
 
 /*
@@ -64,27 +65,34 @@ exports.addUrlToList = function(url, callback) {
   });
 };
 
-exports.isUrlArchived = function(url, callback) {
+exports.isUrlArchived = function(url, callback, isLast) {
   console.log("setInterval is checking the url:", url);
   fs.readFile(exports.paths.archivedSites + '/' + url + '.html', 'utf8', function(err, data){
     if(err) {
-      callback(err, null);
+      callback(err, null, url, isLast);
     } else {
-      callback(null, data);
+      callback(null, data, url);
     }
 
   });
 };
 
+var getBody = function(urlToDownload) {
+    var uri = { uri: 'http://' + urlToDownload };
+    request(uri, function(error, response, body) {
+        // console.log("HTML BODY:", body);
+      console.log("inside Downloadurls and creating the files");
+      fs.writeFile(exports.paths.archivedSites + "/" + urlToDownload + '.html', body, 'utf8', function(){ });
+  });
+};
+
 exports.downloadUrls = function(urlsForDownload) {
   // loop through the urlsForDownload
+  console.log('THIS IS THE DOWNLOADER LOADING THE FOLLOWING URLS:', urlsForDownload);
   for(var i = 0; i < urlsForDownload.length; i++) {
     var urlToDownload = urlsForDownload[i];
-    http.get('http://'+urlToDownload, function(data) {
-      console.log("inside Downloadurls", data);
-      fs.writeFile(urlToDownload + '.html', data, 'utf8', function(){
-      });
-    });
+    console.log("GOING THROUGH THE URLS TO DOWNLOAD THEM", urlToDownload);
+    getBody(urlToDownload);
   }
 };
 
