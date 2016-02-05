@@ -12,7 +12,15 @@ var _ = require('underscore');
 exports.paths = {
   siteAssets: path.join(__dirname, '../web/public'),
   archivedSites: path.join(__dirname, '../archives/sites'),
-  list: path.join(__dirname, '../archives/sites.txt')
+  list: path.join(__dirname, '../archives/sites.txt'),
+  index: path.join(__dirname, '../web/public/index.html')
+};
+
+exports.readIndex = function (callback) {
+  fs.readFile(exports.paths.index, "utf8", function(err, data){
+    if(err) throw err;
+    callback(data);
+  });
 };
 
 // Used for stubbing paths for tests, do not modify
@@ -25,16 +33,18 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(url, callback) {
-  console.log("2. URL passed to isUrlInList:", url);
+exports.readListOfUrls = function(callback) {
+  // console.log("2. URL passed to isUrlInList:", url);
   fs.readFile(exports.paths.list,'utf8', function(err, data){
-    console.log("3. Inside fs.readFile - Data returned: ", data);
-    callback(err, data);
+    // console.log("3. Inside fs.readFile - Data returned: ", data);
+    var urlArray = data.split('\n');
+    console.log(urlArray);
+    callback(urlArray, err);
   });
 };
 
 exports.isUrlInList = function(url, callback) {
-  exports.readListOfUrls(url, function(err, data){
+  exports.readListOfUrls(function(data, err){
     if(err) throw err;
     if(data.indexOf(url) > -1 ){
       callback(true);
@@ -52,15 +62,17 @@ exports.addUrlToList = function(url, callback) {
 };
 
 exports.isUrlArchived = function(url, callback) {
-  fs.readFile(exports.paths.archivedSites + '/' + url, function(err, data){
-    if(err) throw err;
-    // if exists
-    callback(err, null);
+  fs.readFile(exports.paths.archivedSites + '/' + url + '.html', 'utf8', function(err, data){
+    if(err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
 
-    callback(null, data);
-  })
+  });
 };
 
-exports.downloadUrls = function() {
+exports.downloadUrls = function(urlsForDownload) {
+  console.log("urlsForDownload");
 };
 

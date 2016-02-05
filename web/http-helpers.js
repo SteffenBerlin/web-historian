@@ -11,27 +11,19 @@ exports.headers = headers = {
 };
 
 exports.serveIndex = function(res, asset) {
-  // fs.readFile(indexPath, 'utf8', function(err, data){
-  //   if(err) throw err;
-  //   var indexPage = JSON.stringify(data);
-  // });
-  res.writeHead(200, this.headers);
-  res.end(JSON.stringify('Hello test /<input/ what'));
+  archive.readIndex(function(data){
+    res.writeHead(200, this.headers);
+    res.end(JSON.stringify(data));
+  });
+
 };
 
 exports.serveAssets = function(res, url) {
-
-  //if url is in list
-    //if url is in the sites folder
-      //return 200 + sites content to server
-    //else
-      //return is in progress
-  //else return 404
-    console.log("1. Url for ServeAssets", url);
+    // console.log("1. Url for ServeAssets", url);
     archive.isUrlInList(url, function(inList){
-      console.log("4. callback result - is it in the list?",inList);
+      // console.log("4. callback result - is it in the list?",inList);
       if (inList) {
-        archive.isUrlArchived(url, function(data){
+        archive.isUrlArchived(url, function(err, data){
           if (data) {
             res.writeHead(200, this.headers);
             res.end(JSON.stringify(data));
