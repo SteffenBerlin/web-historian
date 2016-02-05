@@ -9,7 +9,7 @@ exports.headers = headers = {
   "access-control-max-age": 10, // Seconds.
   'Content-Type': "text/html"
 };
-
+ 
 exports.serveIndex = function(res, asset) {
   archive.readIndex(function(data){
     res.writeHead(200, this.headers);
@@ -27,7 +27,7 @@ exports.serveAssets = function(res, url) {
           if (data) {
             res.writeHead(200, this.headers);
             res.end(JSON.stringify(data));
-          } else {
+          } else { 
             //return is in progress
           }
         });
@@ -41,7 +41,7 @@ exports.serveAssets = function(res, url) {
 exports.postAssets = function(res, url) {
   archive.isUrlInList(url, function(inList){
     if(!inList){
-      archive.addUrltoList(url, function(){
+      archive.addUrlToList(url, function(){
         res.writeHead(201, this.headers);
         res.end("Added to the list");
       });

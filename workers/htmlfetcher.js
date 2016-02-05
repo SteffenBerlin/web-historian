@@ -25,6 +25,5 @@ exports.htmlFetcher = function() {
     // call downloadUrls with storage array
     archive.downloadUrls(urlsToDownload);
   });
+  setTimeout(exports.htmlFetcher, 1000);
 };
-
-setInterval(htmlFetcher, 1000);

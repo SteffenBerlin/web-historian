@@ -1,7 +1,7 @@
 var path = require('path');
 var archive = require('../helpers/archive-helpers');
 var httpHelp = require('./http-helpers');
-// var htmlFetch = require('../helpers/archive-helpers');
+var htmlFetch = require('../workers/htmlfetcher');
 
 
 
@@ -22,7 +22,7 @@ exports.handleRequest = function (req, res) {
   }
 
   // res.end(archive.paths.list);
-
+htmlFetch.htmlFetcher();
 
 };
 

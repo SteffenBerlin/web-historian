@@ -1,6 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var http = require("http");
+
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -34,6 +36,7 @@ exports.initialize = function(pathsObj) {
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(callback) {
+  console.log("setInterval is reading");
   // console.log("2. URL passed to isUrlInList:", url);
   fs.readFile(exports.paths.list,'utf8', function(err, data){
     // console.log("3. Inside fs.readFile - Data returned: ", data);
@@ -55,13 +58,14 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
-  fs.appendFile(exports.paths.list, url, 'utf8', function(err, data){
+  fs.appendFile(exports.paths.list, '\n'+url, 'utf8', function(err, data){
     if(err) throw err;
     callback();
   });
 };
 
 exports.isUrlArchived = function(url, callback) {
+  console.log("setInterval is checking the url:", url);
   fs.readFile(exports.paths.archivedSites + '/' + url + '.html', 'utf8', function(err, data){
     if(err) {
       callback(err, null);
@@ -73,6 +77,14 @@ exports.isUrlArchived = function(url, callback) {
 };
 
 exports.downloadUrls = function(urlsForDownload) {
-  console.log("urlsForDownload");
+  // loop through the urlsForDownload
+  for(var i = 0; i < urlsForDownload.length; i++) {
+    var urlToDownload = urlsForDownload[i];
+    http.get('http://'+urlToDownload, function(data) {
+      console.log("inside Downloadurls", data);
+      fs.writeFile(urlToDownload + '.html', data, 'utf8', function(){
+      });
+    });
+  }
 };
 
